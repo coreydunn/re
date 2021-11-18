@@ -129,12 +129,12 @@ void display_slide(Buf*file_buffer,Vec*positions,size_t i)
 	char num[128]={0};
 
 	clear();
-	move(1,1);
+	move(2,1);
 	write(1,file_buffer->b+offset1,offset2-offset1);
 
-	move(20,1);
+	move(1,1);
 	sprintf(num,"%lu",positions->n-1);
-	printf("\n\n(%0*lu/%0*lu)\n",
+	printf("(%0*lu/%0*lu)",
 			strlen(num),i+1,
 			strlen(num),positions->n-1);
 }
