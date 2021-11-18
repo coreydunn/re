@@ -57,6 +57,7 @@ int main(int argc,char**argv)
 	save_screen();
 	canon(false);
 	echo(false);
+	set_curs(false);
 	for(size_t i=0;running;)
 	{
 		display_slide(file_buffer,positions,i);
@@ -105,6 +106,7 @@ int main(int argc,char**argv)
 	echo(true);
 	restore_curs();
 	restore_screen();
+	set_curs(true);
 	vec_free(positions);
 	buf_free(file_buffer);
 }
@@ -117,6 +119,7 @@ void die(int s)
 	echo(true);
 	restore_curs();
 	restore_screen();
+	set_curs(true);
 	vec_free(positions);
 	buf_free(file_buffer);
 	exit(55);

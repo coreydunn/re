@@ -10,6 +10,7 @@
 #define restore_screen() send_serial_single("[?47l")
 #define save_curs() send_serial_single("7")
 #define save_screen() send_serial_single("[?47h")
+#define set_curs(x) send_serial_single(x?"[?25h":"[?25l")
 
 // No bracket
 void send_serial_single(char*s);
