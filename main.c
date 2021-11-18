@@ -1,3 +1,4 @@
+#include<signal.h>
 #include<stdbool.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -23,6 +24,7 @@ int main(int argc,char**argv)
 	positions=vec_new();
 
 	if(!file_buffer||!positions) return 5;
+	signal(SIGINT,die);
 
 	// Parse args
 	if(argc<2)return 1;
@@ -53,7 +55,8 @@ int main(int argc,char**argv)
 	// Divided by positions
 	save_curs();
 	save_screen();
-	term_setcanon(false);
+	canon(false);
+	echo(false);
 	for(size_t i=0;running;)
 	{
 		display_slide(file_buffer,positions,i);
@@ -70,6 +73,7 @@ int main(int argc,char**argv)
 				break;
 
 			// Previous
+			case 'b':
 			case 'p':
 			case 'k':
 				if(i>0)
@@ -97,7 +101,8 @@ int main(int argc,char**argv)
 	}
 
 	// Exit
-	term_setcanon(true);
+	canon(true);
+	echo(true);
 	restore_curs();
 	restore_screen();
 	vec_free(positions);
@@ -106,11 +111,15 @@ int main(int argc,char**argv)
 
 void die(int s)
 {
-	term_setcanon(true);
+	fprintf(stderr,"freeing buffer...\n");
+	fprintf(stderr,"exiting...\n");
+	canon(true);
+	echo(true);
 	restore_curs();
 	restore_screen();
 	vec_free(positions);
 	buf_free(file_buffer);
+	exit(55);
 }
 
 void display_slide(Buf*file_buffer,Vec*positions,size_t i)

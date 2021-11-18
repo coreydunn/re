@@ -16,4 +16,6 @@ void send_serial_single(char*s);
 // Uses bracket
 void send_serial_double(uint32_t y,uint32_t x,char*s);
 // Toggle canon/raw mode
-void term_setcanon(int b);
+void canon(int b);
+// Toggle echo
+void echo(int b);
