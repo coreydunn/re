@@ -1,0 +1,26 @@
+How to install Linux
+
+First
+* Go to https://debian.org
+  -- Alternatively https://archlinux.org
+     or whichever distribution you prefer
+* Download a live USB installer image for your
+  architecture
+  -- For most computers this will be amd64 or
+     x86_64
+
+Then
+* Depending on the distribution you choose,
+  either:
+    A) Click through the GUI installer dialogue
+      -- example: Ubuntu workstation, Fedora
+    B) Use TUI interface on command line
+      -- example: Debian server
+  or
+    C) Install manually through a live USB shell
+      -- example: Arch Linux, Gentoo
+
+And...
+  
+  
+Done!
