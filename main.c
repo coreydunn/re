@@ -9,7 +9,7 @@
 #include"term.h"
 #include"vec.h"
 
-void display_slide(Buf*file_buffer,Vec*positions,size_t i);
+void display_slide(char*fn,Buf*file_buffer,Vec*positions,size_t i);
 void die(int s);
 
 Buf*file_buffer;
@@ -81,7 +81,7 @@ int main(int argc,char**argv)
 	set_curs(false);
 	for(size_t i=0;running;)
 	{
-		display_slide(file_buffer,positions,i);
+		display_slide(argv[1],file_buffer,positions,i);
 
 		switch(getchar())
 		{
@@ -146,7 +146,7 @@ void die(int s)
 	exit(55);
 }
 
-void display_slide(Buf*file_buffer,Vec*positions,size_t i)
+void display_slide(char*fn,Buf*file_buffer,Vec*positions,size_t i)
 {
 	size_t offset1=positions->b[i];
 	size_t offset2=positions->b[i+1];
@@ -157,8 +157,16 @@ void display_slide(Buf*file_buffer,Vec*positions,size_t i)
 	write(1,file_buffer->b+offset1,offset2-offset1);
 
 	move(1,1);
+	send_serial_single("[47m");
+	send_serial_single("[30m");
 	sprintf(num,"%lu",positions->n-1);
-	printf("(%0*lu/%0*lu)",
+	printf("%s (%0*lu/%0*lu)",
+			fn,
 			strlen(num),i+1,
 			strlen(num),positions->n-1);
+	fflush(stdout);
+	clearline();
+	send_serial_single("[49m");
+	send_serial_single("[39m");
+	fflush(stdout);
 }
