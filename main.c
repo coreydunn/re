@@ -17,9 +17,6 @@ Vec*positions;
 int main(int argc,char**argv)
 {
 	FILE*f;
-	//Buf*file_buffer=buf_new();
-	////BList*bl=blist_new(NULL);
-	//Vec*positions=vec_new();
 	int running=true;
 
 	file_buffer=buf_new();
@@ -49,13 +46,11 @@ int main(int argc,char**argv)
 			vec_push(positions,i+1);// separate!
 	}
 	vec_push(positions,file_buffer->n);
-	//vec_print(positions);
 
 	// Render -----
 	// Print individual sections
 	// As stored in file_buffer and
 	// Divided by positions
-	//for(size_t i=0;i<positions->n-1&&running;++i)
 	save_curs();
 	save_screen();
 	term_setcanon(false);
@@ -63,8 +58,6 @@ int main(int argc,char**argv)
 	{
 		display_slide(file_buffer,positions,i);
 
-		// TODO: Set to raw mode so we get one character 
-		// at a time from input
 		switch(getchar())
 		{
 
@@ -109,7 +102,6 @@ int main(int argc,char**argv)
 	restore_screen();
 	vec_free(positions);
 	buf_free(file_buffer);
-	//blist_free(bl);
 }
 
 void die(int s)
@@ -119,7 +111,6 @@ void die(int s)
 	restore_screen();
 	vec_free(positions);
 	buf_free(file_buffer);
-	//blist_free(bl);
 }
 
 void display_slide(Buf*file_buffer,Vec*positions,size_t i)
