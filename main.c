@@ -23,13 +23,34 @@ int main(int argc,char**argv)
 	file_buffer=buf_new();
 	positions=vec_new();
 
-	if(!file_buffer||!positions) return 5;
+	if(!file_buffer)
+	{
+		fprintf(stderr,"error: failed to allocate file buffer\n");
+		return 5;
+	}
+
+	if(!positions)
+	{
+		fprintf(stderr,"error: failed to allocate vector\n");
+		return 5;
+	}
+
 	signal(SIGINT,die);
 
 	// Parse args
-	if(argc<2)return 1;
+	if(argc<2)
+	{
+		fprintf(stderr,"usage: re FILENAME\n");
+		return 1;
+	}
+
 	f=fopen(argv[1],"r");
-	if(!f)return 2;
+	if(!f)
+	{
+		fprintf(stderr,"error: failed to open file '%s'\n",
+				argv[1]);
+		return 2;
+	}
 
 	// Read file into buffer
 	while(!feof(f))

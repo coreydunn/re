@@ -3,7 +3,11 @@
 BList*blist_new(BList*head)
 {
 	BList*bl=malloc(sizeof(BList));
-	if(!bl)return NULL;
+	if(!bl)
+	{
+		fprintf(stderr,"error: failed to allocate buffer list\n");
+		return NULL;
+	}
 	bl->prev=head;
 	bl->next=NULL;
 	bl->b=NULL;
@@ -12,7 +16,11 @@ BList*blist_new(BList*head)
 
 void blist_free(BList*bl)
 {
-	if(!bl)return;
+	if(!bl)
+	{
+		fprintf(stderr,"error: cannot free NULL buffer list\n");
+		return;
+	}
 	while(bl->next)
 	{
 		BList*t=bl;
@@ -26,13 +34,27 @@ void blist_free(BList*bl)
 void blist_push(BList*bl,char*s,size_t n)
 {
 	BList*p=bl;
-	if(!bl)return;
+	if(!bl)
+	{
+		fprintf(stderr,"error: cannot push to NULL buffer list\n");
+		return;
+	}
 	while(p->next)p=p->next;
 	p->next=blist_new(p);
-	if(!p->next)return;
+	if(!p->next)
+	{
+		fprintf(stderr,"error: failed to allocate new entry in buffer list\n");
+		return;
+	}
+
+	// 
 	{
 		Buf*b=buf_new();
-		if(!b)return;
+		if(!b)
+		{
+			fprintf(stderr,"error: failed to allocate new file buffer for buffer list\n");
+			return;
+		}
 		for(size_t i=0;i<n;i+=BBUFLEN)
 			buf_push(b,s,n);
 		p->next->b=b;

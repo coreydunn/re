@@ -3,7 +3,11 @@
 Buf*buf_new(void)
 {
 	Buf*b=malloc(sizeof(Buf));
-	if(!b)return NULL;
+	if(!b)
+	{
+		fprintf(stderr,"error: failed to allocate file buffer\n");
+		return NULL;
+	}
 	b->c=0;
 	b->n=0;
 	b->b=NULL;
@@ -12,7 +16,11 @@ Buf*buf_new(void)
 
 void buf_free(Buf*b)
 {
-	if(!b)return;
+	if(!b)
+	{
+		fprintf(stderr,"error: cannot free NULL file buffer\n");
+		return;
+	}
 	if(b->b)
 		free(b->b);
 	b->c=0;
@@ -23,7 +31,11 @@ void buf_free(Buf*b)
 
 void buf_grow(Buf*b)
 {
-	if(!b)return;
+	if(!b)
+	{
+		fprintf(stderr,"error: cannot grow NULL file buffer\n");
+		return;
+	}
 	if(!b->b)
 	{
 		b->b=malloc(BBUFLEN*sizeof(char));
@@ -44,7 +56,11 @@ void buf_push(Buf*b,char*c,size_t n)
 		fprintf(stderr,"error: cannot write %lu bytes to buffer\n",n);
 		return;
 	}
-	if(!b||!c||!n)return;
+	if(!b||!c||!n)
+	{
+		fprintf(stderr,"error: cannot push to empty/NULL file buffer\n");
+		return;
+	}
 	if(!b->b||b->n+n>b->c)
 		buf_grow(b);
 	memcpy(b->b+b->n,c,n);
