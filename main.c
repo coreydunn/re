@@ -10,7 +10,7 @@
 #include"vec.h"
 
 void display_slide(char*fn,Buf*file_buffer,Vec*positions,size_t i);
-void die(int s);
+void quit(int sig);
 
 Buf*file_buffer;
 Vec*positions;
@@ -21,31 +21,34 @@ int main(int argc,char**argv)
 	int running=true;
 	int nm=0;
 
+	// Allocate buffers
 	file_buffer=buf_new();
-	positions=vec_new();
-
 	if(!file_buffer)
 	{
 		fprintf(stderr,"error: failed to allocate file buffer\n");
 		return 5;
 	}
 
+	positions=vec_new();
 	if(!positions)
 	{
 		fprintf(stderr,"error: failed to allocate vector\n");
 		return 5;
 	}
 
-	signal(SIGINT,die);
+	// Handle interrupts gracefully
+	signal(SIGINT,quit);
 
 	// Parse args
 	if(argc<2)
 	{
-		fprintf(stderr,"usage: re FILENAME\n");
-		return 1;
+		f=stdin;
+		//fprintf(stderr,"usage: re FILENAME\n");
+		//return 1;
 	}
+	else
+		f=fopen(argv[1],"r");
 
-	f=fopen(argv[1],"r");
 	if(!f)
 	{
 		fprintf(stderr,"error: failed to open file '%s'\n",
@@ -60,7 +63,9 @@ int main(int argc,char**argv)
 		size_t n=fread(c,1,512,f);
 		buf_push(file_buffer,c,n);
 	}
-	fclose(f);
+
+	//if(f!=stdin)
+		//fclose(f);
 
 	// Mark offsets between paragraphs
 	vec_push(positions,0);
@@ -154,16 +159,10 @@ int main(int argc,char**argv)
 	}
 
 	// Exit
-	canon(true);
-	echo(true);
-	restore_curs();
-	restore_screen();
-	set_curs(true);
-	vec_free(positions);
-	buf_free(file_buffer);
+	quit(SIGKILL);
 }
 
-void die(int s)
+void quit(int sig)
 {
 	fprintf(stderr,"freeing buffer...\n");
 	fprintf(stderr,"exiting...\n");
@@ -174,7 +173,7 @@ void die(int s)
 	set_curs(true);
 	vec_free(positions);
 	buf_free(file_buffer);
-	exit(55);
+	exit(0);
 }
 
 void display_slide(char*fn,Buf*file_buffer,Vec*positions,size_t i)
